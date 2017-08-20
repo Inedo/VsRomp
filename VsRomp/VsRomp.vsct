@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h" />
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h" />
+
+  <!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidVsRomp">
+    <Groups>
+      <Group guid="guidVsRompCmdSet" id="vsRompMenuGroup" priority="0x0104">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+      <Group guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" priority="0x0000">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenu"/>
+      </Group>
+    </Groups>
+
+    <Menus>
+      <Menu guid="guidVsRompCmdSet" id="vsRompSubMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidVsRompCmdSet" id="vsRompMenuGroup" />
+        <Strings>
+          <ButtonText>Romp</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Buttons>
+      <Button guid="guidVsRompCmdSet" id="cmdidConfigureCommand" priority="0x0100" type="Button">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" />
+        <Strings>
+          <ButtonText>Configure&#8230;</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVsRompCmdSet" id="cmdidValidateCommand" priority="0x0110" type="Button">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" />
+        <Strings>
+          <ButtonText>Validate</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVsRompCmdSet" id="cmdidPackageCommand" priority="0x0120" type="Button">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" />
+        <Strings>
+          <ButtonText>Package</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVsRompCmdSet" id="cmdidTestCommand" priority="0x0130" type="Button">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" />
+        <Strings>
+          <ButtonText>Test</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVsRompCmdSet" id="cmdidPushCommand" priority="0x0140" type="Button">
+        <Parent guid="guidVsRompCmdSet" id="vsRompSubMenuGroup" />
+        <Strings>
+          <ButtonText>Push&#8230;</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidVsRompIcon" href="Resources/VsRomp.ico" />
+    </Bitmaps>
+  </Commands>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidVsRomp" value="{f3612fbc-6e3b-4c5e-bd16-d59e76b7fbb2}" />
+
+    <GuidSymbol name="guidVsRompIcon" value="{115d4ec5-6bba-4274-931e-581a1afb06d2}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidVsRompCmdSet" value="{a30f8d3f-5deb-4ef3-9bf3-61b145395b45}">
+      <IDSymbol value="0x1020" name="vsRompMenuGroup" />
+      <IDSymbol value="0x1021" name="vsRompSubMenu" />
+      <IDSymbol value="0x1022" name="vsRompSubMenuGroup" />
+      <IDSymbol value="0x0100" name="cmdidConfigureCommand" />
+      <IDSymbol value="0x0101" name="cmdidValidateCommand" />
+      <IDSymbol value="0x0102" name="cmdidPackageCommand" />
+      <IDSymbol value="0x0103" name="cmdidTestCommand" />
+      <IDSymbol value="0x0104" name="cmdidPushCommand" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

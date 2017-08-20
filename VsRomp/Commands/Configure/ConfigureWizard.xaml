@@ -1,0 +1,193 @@
+﻿<Window x:Class="VsRomp.Commands.Configure.ConfigureWizard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d"
+        d:DesignWidth="600" d:DesignHeight="400"
+        xmlns:local="clr-namespace:VsRomp.Commands.Configure"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:romp="clr-namespace:VsRomp"
+        Name="window"
+        Closing="Window_Closing"
+        Width="600" Height="400">
+    <Window.Resources>
+        <local:VariableCollection x:Key="variableCollection"/>
+        <local:RaftCollection x:Key="raftCollection"/>
+        <local:CredentialCollection x:Key="credentialCollection"/>
+        <ObjectDataProvider x:Key="variableTypes"
+                MethodName="GetValues" 
+                ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="romp:VariableType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl>
+            <TabItem Header="Universal Metadata">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Group" VerticalAlignment="Top"/>
+                    <TextBox Name="universal_group" Height="23" VerticalAlignment="Top" Grid.Column="1" MaxLength="50"/>
+                    <Label Content="Name" VerticalAlignment="Top" Grid.Row="1"/>
+                    <TextBox Name="universal_name" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" MaxLength="50"/>
+                    <Label Content="Version" VerticalAlignment="Top" Grid.Row="2"/>
+                    <TextBox Name="universal_version" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2"/>
+                    <Rectangle Grid.Row="3" Height="10" />
+                    <Label Content="Title" VerticalAlignment="Top" Grid.Row="4"/>
+                    <TextBox Name="universal_title" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="4" MaxLength="50"/>
+                    <Label Content="Icon" VerticalAlignment="Top" Grid.Row="5"/>
+                    <TextBox Name="universal_icon" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="5" MaxLength="50"/>
+                    <Label Content="Description" VerticalAlignment="Top" Grid.Row="6"/>
+                    <TextBox Name="universal_description" Grid.Column="1" Grid.Row="6" AcceptsReturn="True" TextWrapping="Wrap"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Romp Package">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Grid.ColumnSpan="2">
+                        <CheckBox Name="romp_cachePackages" Content="Cache packages" Margin="5"/>
+                        <CheckBox Name="romp_userMode" Content="User mode" Margin="5"/>
+                        <CheckBox Name="romp_secureCredentials" Content="Secure credentials" Margin="5"/>
+                        <CheckBox Name="romp_storeConfiguration" Content="Store configuration" Margin="5"/>
+                        <CheckBox Name="romp_storeLogs" Content="Store logs" Margin="5"/>
+                    </WrapPanel>
+                    <Label Content="Local data store" Grid.Row="1" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_localDataStore" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1"/>
+                    <Label Content="Local package registry" Grid.Row="2" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_localPackageRegistry" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2"/>
+                    <Label Content="Package source" Grid.Row="3" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_packageSource" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"/>
+                    <Label Content="Extensions path" Grid.Row="4" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_extensionsPath" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="4"/>
+                    <Label Content="Extensions temp path" Grid.Row="5" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_extensionsTempPath" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="5"/>
+                    <Label Content="Proxy" Grid.Row="6" VerticalAlignment="Top"/>
+                    <TextBox Name="romp_proxy" Height="23" VerticalAlignment="Top" Grid.Column="1" Grid.Row="6"/>
+                    <Label Content="Rafts" Grid.Row="7" VerticalAlignment="Top"/>
+                    <DataGrid Name="romp_rafts" Grid.Column="1" Grid.Row="7" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="True" CanUserDeleteRows="True" ItemsSource="{StaticResource raftCollection}" SelectedCellsChanged="RemoveBlankStrings">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="2*"/>
+                        </DataGrid.Columns>
+                        <DataGrid.RowValidationRules>
+                            <local:UniqueNameValidationRule ValidationStep="UpdatedValue"/>
+                        </DataGrid.RowValidationRules>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Variables">
+                <DataGrid Name="variables" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="True" CanUserDeleteRows="True" ItemsSource="{StaticResource variableCollection}" SelectedCellsChanged="RemoveBlankStrings">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridComboBoxColumn Header="Type" ItemsSource="{Binding Source={StaticResource variableTypes}, Mode=OneWay}" SelectedValueBinding="{Binding Properties.Type}" Width="100"/>
+                        <DataGridTextColumn Header="Default Value" Binding="{Binding Properties.Value}" Width="*"/>
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <Grid MinHeight="150" Width="{Binding Path=ActualWidth,RelativeSource={RelativeSource AncestorType=DataGridDetailsPresenter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <WrapPanel Grid.ColumnSpan="2">
+                                    <CheckBox IsChecked="{Binding Properties.Required}" Content="Required" Margin="5"/>
+                                    <CheckBox IsChecked="{Binding Properties.Sensitive}" Content="Sensitive" Margin="5"/>
+                                    <CheckBox IsChecked="{Binding Properties.ListRestrict}" Content="Restrict Values" Margin="5"/>
+                                </WrapPanel>
+                                <Label Content="Description" Grid.Row="1"/>
+                                <TextBox Text="{Binding Properties.Description}" AcceptsReturn="True" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" MinLines="2"/>
+                                <Label Content="Values" Grid.Row="2"/>
+                                <DataGrid ItemsSource="{Binding Properties.ListValues}" HeadersVisibility="Row" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="True" CanUserDeleteRows="True" MinRowHeight="20" Grid.Row="2" Grid.Column="1" SelectedCellsChanged="RemoveBlankStrings">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Value}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+                    <DataGrid.RowValidationRules>
+                        <local:UniqueNameValidationRule ValidationStep="UpdatedValue"/>
+                    </DataGrid.RowValidationRules>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Credentials">
+                <DataGrid Name="credentials" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="True" CanUserDeleteRows="True" ItemsSource="{StaticResource credentialCollection}" SelectedCellsChanged="RemoveBlankStrings">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <Grid MinHeight="150" Width="{Binding Path=ActualWidth,RelativeSource={RelativeSource AncestorType=DataGridDetailsPresenter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <WrapPanel Grid.ColumnSpan="2">
+                                    <CheckBox IsChecked="{Binding Restricted}" Content="Restricted" Margin="5"/>
+                                </WrapPanel>
+                                <Label Content="Description" Grid.Row="1"/>
+                                <TextBox Text="{Binding Description}" AcceptsReturn="True" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" MinLines="2"/>
+                                <Label Content="Defaults" Grid.Row="2"/>
+                                <DataGrid ItemsSource="{Binding Defaults}" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="True" CanUserDeleteRows="True" MinRowHeight="20" Grid.Row="2" Grid.Column="1" SelectedCellsChanged="RemoveBlankStrings">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Binding="{Binding Value}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+                    <DataGrid.RowValidationRules>
+                        <local:UniqueNameValidationRule ValidationStep="UpdatedValue"/>
+                    </DataGrid.RowValidationRules>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <Button Name="save_button" IsEnabled="False" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Grid.Row="1" Margin="10" Click="Save_Click"/>
+    </Grid>
+</Window>
