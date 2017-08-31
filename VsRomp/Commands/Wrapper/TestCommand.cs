@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using Newtonsoft.Json;
+using System.IO;
+using System.Threading;
 
 namespace VsRomp.Commands.Wrapper
 {
@@ -43,7 +45,16 @@ namespace VsRomp.Commands.Wrapper
         {
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                this.Romp("install --test");
+                var metadataJson = File.ReadAllText(Path.Combine(Path.GetDirectoryName(this.Package.SelectedProject.FullName), ".upack", "upack.json"));
+                var metadata = JsonConvert.DeserializeObject<UPackMetadata>(metadataJson);
+
+                try
+                {
+                    this.Romp("install \"" + metadata.Name + "-" + metadata.Version + "\" --test");
+                }
+                catch
+                {
+                }
             });
         }
     }

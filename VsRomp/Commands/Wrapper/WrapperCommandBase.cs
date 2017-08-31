@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.IO.Compression;
 
 namespace VsRomp.Commands.Wrapper
 {
@@ -39,13 +40,24 @@ namespace VsRomp.Commands.Wrapper
 
         internal abstract void Run();
 
-        private static readonly string RompExecutableName = Path.Combine(Path.GetDirectoryName(typeof(WrapperCommandBase).Assembly.Location), "romp.exe");
+        private static readonly Lazy<string> RompExecutableName = new Lazy<string>(() =>
+        {
+            var zipFile = Path.Combine(Path.GetDirectoryName(typeof(WrapperCommandBase).Assembly.Location), "Resources", "romp.zip");
+            var directoryName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Inedo", "VsRomp", "romp-" + typeof(WrapperCommandBase).Assembly.GetName().Version.ToString());
+            var executableName = Path.Combine(directoryName, "romp.exe");
+            if (File.Exists(executableName))
+                return executableName;
+
+            ZipFile.ExtractToDirectory(zipFile, directoryName);
+
+            return executableName;
+        });
 
         private static Guid RompPaneGuid = new Guid("{610c2be5-4ae8-4de0-ac96-0ff0836fcb43}");
 
         internal void Romp(string arguments, Action<string> onOutput = null, string executable = null)
         {
-            executable = executable ?? RompExecutableName;
+            executable = executable ?? RompExecutableName.Value;
             var outputPane = this.CreateOutputPane();
 
             using (var process = new System.Diagnostics.Process
@@ -81,16 +93,23 @@ namespace VsRomp.Commands.Wrapper
 
                 outputPane.OutputStringThreadSafe($"> {Path.GetFileName(executable)} {arguments}\n");
 
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.WaitForExit();
-
-                outputPane.OutputStringThreadSafe($"{Path.GetFileName(executable)} exited with code {process.ExitCode}\n");
-
-                if (process.ExitCode != 0)
+                try
                 {
-                    throw new Exception($"{Path.GetFileName(executable)} exited with code {process.ExitCode}");
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new Exception($"{Path.GetFileName(executable)} exited with code {process.ExitCode}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    outputPane.OutputStringThreadSafe($"{ex.Message}\n");
+
+                    throw;
                 }
             }
         }
