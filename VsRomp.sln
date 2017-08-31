@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsRomp", "VsRomp\VsRomp.csproj", "{560F8734-E977-42DC-A726-E98312AE0780}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyRomp", "DummyRomp\DummyRomp.csproj", "{9634F67E-4EC8-4756-8423-7CEE0DDFF7E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{560F8734-E977-42DC-A726-E98312AE0780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{560F8734-E977-42DC-A726-E98312AE0780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{560F8734-E977-42DC-A726-E98312AE0780}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9634F67E-4EC8-4756-8423-7CEE0DDFF7E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9634F67E-4EC8-4756-8423-7CEE0DDFF7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9634F67E-4EC8-4756-8423-7CEE0DDFF7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9634F67E-4EC8-4756-8423-7CEE0DDFF7E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
